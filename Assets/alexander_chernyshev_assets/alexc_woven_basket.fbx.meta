@@ -3,7 +3,12 @@ guid: f3f4c517fd06de4428e91117fddc56ac
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wovenbasket_material
+    second: {fileID: 2100000, guid: 1ae66ecc41eac0342b8a4f11ea8c3e87, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

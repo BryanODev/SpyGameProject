@@ -8,8 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: CharacterBase_M
-    second: {fileID: -3963241562183589234, guid: 720071991ee8702499b6b4932336c79c,
-      type: 3}
+    second: {fileID: 2100000, guid: 06e5d878f6254cb4da625716f78a57f4, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
