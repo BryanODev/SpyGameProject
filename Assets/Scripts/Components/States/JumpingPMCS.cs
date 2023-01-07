@@ -11,7 +11,7 @@ public class JumpingPMCS : PlayerMovementState
 
     public override void OnStateEnter()
     {
-        if (playerMovement.GetIsCrouching()) 
+        if (playerMovement.IsCrouching()) 
         {
             playerMovement.UnCrouch();
 

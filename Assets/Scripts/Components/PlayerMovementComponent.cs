@@ -232,7 +232,7 @@ public class PlayerMovementComponent : PlayerMovementStateMachine
         return sprinting;
     }
 
-    public bool GetIsCrouching()
+    public bool IsCrouching()
     {
         return bIsCrouching;
     }

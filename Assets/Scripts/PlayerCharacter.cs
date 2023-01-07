@@ -14,6 +14,8 @@ public class PlayerCharacter : MonoBehaviour
     float controllerPitch;
     Vector3 LastInput;
 
+    bool sneaking;
+
     private void Awake()
     {
         PlayerInputsComponent = new PlayerInputs();
@@ -55,6 +57,8 @@ public class PlayerCharacter : MonoBehaviour
     private void Update()
     {
         Move(PlayerInputsComponent.Keyboard.Move.ReadValue<Vector2>());
+
+        sneaking = MovementComponent.IsCrouching();
     }
 
     void StartSprint() 
