@@ -9,6 +9,8 @@ public class GameMode : MonoBehaviour
     PlayerCharacter character;
 
     public Transform lastCheckpoint;
+    float learningProgress;
+
     void Start()
     {
         if (Instance != null && Instance != this)
@@ -26,5 +28,17 @@ public class GameMode : MonoBehaviour
     {
         //restart scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void AddLearningProgress(float ammount) 
+    {
+        learningProgress = learningProgress + ammount;
+
+        learningProgress = Mathf.Clamp(ammount, 0, 100);
+
+        if (learningProgress >= 100) 
+        {
+            //We finish game
+        }
     }
 }

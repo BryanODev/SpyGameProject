@@ -62,7 +62,7 @@ public class Guard : MonoBehaviour
             {
                 if (!isPatrolling)
                 {
-                    transform.rotation = startRot;
+                    //transform.rotation = startRot;
                 }
 
                 canLookForTarget = true;
@@ -143,10 +143,17 @@ public class Guard : MonoBehaviour
 
         Debug.Log("We capture the player!");
 
+        if (!DestinationReached())
+        {
+            Debug.Log("The player is escaping!");
+            yield return null;
+        }
+
         canLookForTarget = false;
         IsChasing = false;
         chaseTarget = null;
         navAgent.SetDestination(positionBeforeChase);
+
 
         //Tell the gamemode we caught the player
         GameMode.Instance.OnPlayerCaugh();

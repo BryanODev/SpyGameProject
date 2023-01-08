@@ -15,6 +15,7 @@ public class PlayerCharacter : MonoBehaviour
     Vector3 LastInput;
 
     bool sneaking;
+    IInteractable objectInteracting;
 
     private void Awake()
     {
@@ -52,6 +53,9 @@ public class PlayerCharacter : MonoBehaviour
 
             PlayerInputsComponent.Keyboard.Crouch.performed += ctx => StartCrouch();
             PlayerInputsComponent.Keyboard.Crouch.canceled += ctx => StopCrouch();
+
+            PlayerInputsComponent.Keyboard.Interact.performed += ctx => Interact();
+            PlayerInputsComponent.Keyboard.Interact.canceled += ctx => Interact();
         }
     }
 
@@ -62,29 +66,35 @@ public class PlayerCharacter : MonoBehaviour
         sneaking = MovementComponent.IsCrouching();
     }
 
-    void StartSprint() 
+    void StartSprint()
     {
         MovementComponent.SetIsSprinting(true);
     }
 
-    void StopSprinting() 
+    void StopSprinting()
     {
-        MovementComponent.SetIsSprinting(false);
+        if (MovementComponent)
+        {
+            MovementComponent.SetIsSprinting(false);
+        }
     }
 
-    void StartCrouch() 
+    void StartCrouch()
     {
-        MovementComponent.Crouch();
+        if (MovementComponent)
+        {
+            MovementComponent.Crouch();
+        }
     }
 
-    void StopCrouch() 
+    void StopCrouch()
     {
         MovementComponent.UnCrouch();
     }
 
     void Move(Vector2 Direction)
     {
-        if (Direction == Vector2.zero) 
+        if (Direction == Vector2.zero)
         {
             LastInput = Vector2.zero;
             return;
@@ -115,6 +125,32 @@ public class PlayerCharacter : MonoBehaviour
         if (PlayerCameraComponent != null)
         {
             PlayerCameraComponent.transform.rotation = Quaternion.Euler(controllerPitch, PlayerCameraComponent.transform.rotation.eulerAngles.y, PlayerCameraComponent.transform.rotation.eulerAngles.z);
+        }
+    }
+
+    void Interact() 
+    {
+        if (PlayerCameraComponent != null)
+        {
+            RaycastHit hit;
+
+            if (Physics.Raycast(PlayerCameraComponent.transform.position, PlayerCameraComponent.transform.forward, out hit, 2.0f))
+            {
+                objectInteracting = hit.transform.GetComponent<IInteractable>();
+
+                if (objectInteracting != null)
+                {
+                    objectInteracting.OnInteract();
+                }
+            }
+        }
+    }
+
+    void StopInteract() 
+    {
+        if (objectInteracting != null) 
+        {
+            objectInteracting.OnInteractStop();
         }
     }
 

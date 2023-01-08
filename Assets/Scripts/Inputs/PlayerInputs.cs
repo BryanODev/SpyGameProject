@@ -98,6 +98,15 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""885b72fb-3e61-47cc-97ea-d9adb23cdf1f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -232,6 +241,17 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d9f6d3f-df7d-4426-adf9-eeeb7d4da136"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -248,6 +268,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Keyboard_LockTarget = m_Keyboard.FindAction("LockTarget", throwIfNotFound: true);
         m_Keyboard_Sprint = m_Keyboard.FindAction("Sprint", throwIfNotFound: true);
         m_Keyboard_Crouch = m_Keyboard.FindAction("Crouch", throwIfNotFound: true);
+        m_Keyboard_Interact = m_Keyboard.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -315,6 +336,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_LockTarget;
     private readonly InputAction m_Keyboard_Sprint;
     private readonly InputAction m_Keyboard_Crouch;
+    private readonly InputAction m_Keyboard_Interact;
     public struct KeyboardActions
     {
         private @PlayerInputs m_Wrapper;
@@ -327,6 +349,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @LockTarget => m_Wrapper.m_Keyboard_LockTarget;
         public InputAction @Sprint => m_Wrapper.m_Keyboard_Sprint;
         public InputAction @Crouch => m_Wrapper.m_Keyboard_Crouch;
+        public InputAction @Interact => m_Wrapper.m_Keyboard_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -360,6 +383,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Crouch.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnCrouch;
                 @Crouch.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnCrouch;
                 @Crouch.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnCrouch;
+                @Interact.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnInteract;
             }
             m_Wrapper.m_KeyboardActionsCallbackInterface = instance;
             if (instance != null)
@@ -388,6 +414,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Crouch.started += instance.OnCrouch;
                 @Crouch.performed += instance.OnCrouch;
                 @Crouch.canceled += instance.OnCrouch;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
         }
     }
@@ -402,5 +431,6 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnLockTarget(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }
