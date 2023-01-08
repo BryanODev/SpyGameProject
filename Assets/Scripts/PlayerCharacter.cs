@@ -17,6 +17,9 @@ public class PlayerCharacter : MonoBehaviour
     bool sneaking;
     IInteractable objectInteracting;
 
+    bool hasPause;
+    public GameObject PauseMenu;
+    bool crouching;
     private void Awake()
     {
         PlayerInputsComponent = new PlayerInputs();
@@ -52,15 +55,48 @@ public class PlayerCharacter : MonoBehaviour
             PlayerInputsComponent.Keyboard.Sprint.canceled += ctx => StopSprinting();
 
             PlayerInputsComponent.Keyboard.Crouch.performed += ctx => StartCrouch();
-            PlayerInputsComponent.Keyboard.Crouch.canceled += ctx => StopCrouch();
+            //PlayerInputsComponent.Keyboard.Crouch.canceled += ctx => StopCrouch();
 
             PlayerInputsComponent.Keyboard.Interact.performed += ctx => Interact();
             PlayerInputsComponent.Keyboard.Interact.canceled += ctx => Interact();
+
+            PlayerInputsComponent.Keyboard.Pause.performed += ctx => TogglePause();
+        }
+    }
+
+    public void TogglePause() 
+    {
+        if (!hasPause)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            hasPause = true;
+
+            if (PauseMenu != null)
+            {
+                PauseMenu.SetActive(true);
+            }
+        }
+        else 
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            hasPause = false;
+
+            if (PauseMenu != null)
+            {
+                PauseMenu.SetActive(false);
+            }
         }
     }
 
     private void Update()
     {
+        if (hasPause) 
+        {
+            return;
+        }
+
         Move(PlayerInputsComponent.Keyboard.Move.ReadValue<Vector2>());
 
         sneaking = MovementComponent.IsCrouching();
@@ -81,15 +117,25 @@ public class PlayerCharacter : MonoBehaviour
 
     void StartCrouch()
     {
-        if (MovementComponent)
+        if (!crouching)
         {
-            MovementComponent.Crouch();
+            if (MovementComponent)
+            {
+                MovementComponent.Crouch();
+                crouching = true;
+            }
+            
+        }
+        else 
+        {
+            StopCrouch();
         }
     }
 
     void StopCrouch()
     {
         MovementComponent.UnCrouch();
+        crouching = false;
     }
 
     void Move(Vector2 Direction)
@@ -116,6 +162,12 @@ public class PlayerCharacter : MonoBehaviour
 
     void AddControllerPitch(float Axis)
     {
+        if (hasPause) 
+        {
+            return;
+        }
+
+
         //PlayerCamera.Rotate(Vector3.right, Axis);
 
         controllerPitch += Axis;
@@ -156,6 +208,11 @@ public class PlayerCharacter : MonoBehaviour
 
     void AddControllerYaw(float Axis)
     {
+        if (hasPause)
+        {
+            return;
+        }
+
         if (Controller)
         {
             Controller.Rotate(Vector3.up * Axis);

@@ -14,9 +14,21 @@ public class Door : MonoBehaviour, IInteractable
 
     public float OpenAngle;
     public float CloseAngle;
+
+    AudioSource audioSource;
+    public AudioClip DoorClip;
+
+
+    void Awake() 
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     public void OnInteract()
     {
         ToggleDoor();
+
+        
     }
 
     void ToggleDoor() 
@@ -24,12 +36,15 @@ public class Door : MonoBehaviour, IInteractable
         if (!isOpen) 
         {
             transform.Rotate(Vector3.up * OpenAngle);
+            isOpen = true;
+        }
+        else
+        {
+            transform.rotation = Quaternion.identity;
+            isOpen = false;
         }
 
-        if (isOpen)
-        {
-            transform.Rotate(Vector3.up * CloseAngle);
-        }
+        audioSource.PlayOneShot(DoorClip);
     }
 
     public void OnInteractStop()

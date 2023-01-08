@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class Blueprint : MonoBehaviour, IInteractable
 {
+    AudioSource audioSource;
+
     bool CanInteract = true;
+
+    void Awake() 
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     public void OnInteract()
     {
         if (CanInteract)
@@ -21,6 +29,12 @@ public class Blueprint : MonoBehaviour, IInteractable
     void StartLearning() 
     {
         //We start adding learning to gamemode
+        gameObject.SetActive(false);
+
+        if (GameMode.Instance) 
+        {
+            GameMode.Instance.OnBlueprintPickUp();
+        }
     }
 
     IEnumerator IncreaseLearning() 

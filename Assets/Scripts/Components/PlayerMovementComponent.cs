@@ -46,6 +46,11 @@ public class PlayerMovementComponent : PlayerMovementStateMachine
 
     RaycastHit groundInfo;
 
+    AudioSource audioSource;
+    public AudioClip FootSteps;
+    public AudioClip JumpClip;
+    public AudioClip LandedClip;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -58,6 +63,8 @@ public class PlayerMovementComponent : PlayerMovementStateMachine
 
         UncrouchHeight = characterController.height;
         crouchHeight = UncrouchHeight / 2;
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     protected override void Update()
@@ -120,6 +127,12 @@ public class PlayerMovementComponent : PlayerMovementStateMachine
         switch (newState)
         {
             case EPlayerMovementState.Walking:
+
+                if (currentPlayerState == EPlayerMovementState.Falling || currentPlayerState == EPlayerMovementState.Jumping) 
+                {
+                    audioSource.PlayOneShot(LandedClip);
+                }
+
                 currentPlayerState = EPlayerMovementState.Walking;
                 SwitchState(walkingPMCS);
                 break;
@@ -148,6 +161,8 @@ public class PlayerMovementComponent : PlayerMovementStateMachine
         //reset Y Velocity to 0 before trying to jump, so that gravity wont accumulate
         StopYVelocity();
         velocity.y += JumpForce;
+
+        audioSource.PlayOneShot(JumpClip);
     }
 
     public void PerformJump()

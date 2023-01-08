@@ -32,6 +32,12 @@ public class Guard : MonoBehaviour
 
     Animator guardAnimator;
 
+    bool isPlayingChaseSound;
+
+    AudioSource audioSource;
+    public AudioClip AlertGuard;
+    public AudioClip Gotyou;
+
     private void Awake()
     {
         navAgent = GetComponent<NavMeshAgent>();
@@ -39,6 +45,7 @@ public class Guard : MonoBehaviour
         navAgent.speed = walkSpeed;
 
         guardAnimator = GetComponentInChildren<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public virtual void Update()
@@ -108,6 +115,8 @@ public class Guard : MonoBehaviour
             positionBeforeChase = transform.position;
             startRot = transform.rotation;
             navAgent.speed = chaseSpeed;
+
+            audioSource.PlayOneShot(AlertGuard);
         }
     }
 
@@ -142,6 +151,12 @@ public class Guard : MonoBehaviour
         yield return new WaitForSeconds(.25f);
 
         Debug.Log("We capture the player!");
+
+        if (!isPlayingChaseSound)
+        {
+            audioSource.PlayOneShot(Gotyou);
+            isPlayingChaseSound = true;
+        }
 
         if (!DestinationReached())
         {
