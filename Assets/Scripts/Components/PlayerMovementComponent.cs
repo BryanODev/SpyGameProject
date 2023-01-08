@@ -70,6 +70,11 @@ public class PlayerMovementComponent : PlayerMovementStateMachine
         {
             characterController.Move(launchVelocity * Time.deltaTime);
         }
+
+        if (velocity.magnitude == 0)
+        {
+            characterController.Move(Vector3.down);
+        }
     }
 
     public Vector3 ConsumeInput()

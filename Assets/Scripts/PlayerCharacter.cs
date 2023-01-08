@@ -20,6 +20,7 @@ public class PlayerCharacter : MonoBehaviour
     {
         PlayerInputsComponent = new PlayerInputs();
         PlayerInputsComponent.Enable();
+        Controller = transform;
 
         PlayerCameraComponent = GetComponentInChildren<PlayerCamera>();
         MovementComponent = GetComponent<PlayerMovementComponent>();
@@ -109,14 +110,20 @@ public class PlayerCharacter : MonoBehaviour
 
         controllerPitch += Axis;
         controllerPitch = Mathf.Clamp(controllerPitch, -90f, 90f);
-        
+
         //Camera rotation only allowed if game us not paused
-        PlayerCameraComponent.transform.rotation = Quaternion.Euler(controllerPitch, PlayerCameraComponent.transform.rotation.eulerAngles.y, PlayerCameraComponent.transform.rotation.eulerAngles.z);
+        if (PlayerCameraComponent != null)
+        {
+            PlayerCameraComponent.transform.rotation = Quaternion.Euler(controllerPitch, PlayerCameraComponent.transform.rotation.eulerAngles.y, PlayerCameraComponent.transform.rotation.eulerAngles.z);
+        }
     }
 
     void AddControllerYaw(float Axis)
     {
-        Controller.Rotate(Vector3.up * Axis);
+        if (Controller)
+        {
+            Controller.Rotate(Vector3.up * Axis);
+        }
     }
 
     void Jump() 
